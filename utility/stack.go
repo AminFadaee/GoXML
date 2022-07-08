@@ -14,6 +14,10 @@ func NewStack[T any]() *stack[T] {
 	return &stack[T]{sync.Mutex{}, make([]T, 0)}
 }
 
+func (s *stack[T]) IsNotEmpty() bool {
+	return len(s.s) > 0
+}
+
 func (s *stack[T]) Push(v T) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
