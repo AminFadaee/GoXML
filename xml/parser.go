@@ -1,7 +1,6 @@
-package xmlParser
+package xml
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -90,7 +89,5 @@ func ParseXML(text string) XML {
 	if err == nil {
 		xml.chlidren = firstInsertedRawXML.children
 	}
-	fmt.Println(xml)
-	fmt.Println(xml.GetContent())
 	return xml
 }
