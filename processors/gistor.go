@@ -9,7 +9,7 @@ import (
 )
 
 func gistParagraph(content *string) string {
-	indices := utility.IndeciesInString(*content, ".", "!", "?")
+	indices := utility.IndeciesInString(*content, ". ", "! ", "? ")
 	endDotIndex := len(*content) - len(`</p>`) - 1
 	if !slices.Contains(indices, endDotIndex) {
 		indices = append(indices, endDotIndex)
@@ -18,11 +18,11 @@ func gistParagraph(content *string) string {
 		return *content
 	}
 	firstSentEnd, LastSentStart := indices[0], indices[len(indices)-2]+1
-	summary := fmt.Sprintf("<<%d>>", len((*content)[firstSentEnd+1:LastSentStart]))
+	summary := fmt.Sprintf("[%d]", len((*content)[firstSentEnd+1:LastSentStart]))
 	return (*content)[:firstSentEnd+1] + summary + (*content)[LastSentStart:]
 }
 
-func getGist(xml xmlUtil.XML) {
+func GetGist(xml xmlUtil.XML) xmlUtil.XML {
 	stack := utility.NewStack[xmlUtil.XMLElement]()
 	stack.Push(&xml)
 	for stack.IsNotEmpty() {
@@ -30,10 +30,12 @@ func getGist(xml xmlUtil.XML) {
 		if strings.ToLower(c.GetTag()) == "p" {
 			text := c.GetContent()
 			newText := gistParagraph(&text)
-			xmlUtil.Patch(c, &newText)
-		}
-		for _, elm := range c.GetChildren() {
-			stack.Push(elm)
+			xmlUtil.Patch(&c, &newText)
+		} else {
+			for _, elm := range c.GetChildren() {
+				stack.Push(elm)
+			}
 		}
 	}
+	return xml
 }
