@@ -1,6 +1,10 @@
 package utility
 
-import "strings"
+import (
+	"crypto/md5"
+	"encoding/hex"
+	"strings"
+)
 
 func firstIndex(s string, substrs ...string) int {
 	minIndex := -1
@@ -23,4 +27,10 @@ func IndeciesInString(s string, substrs ...string) []int {
 		hit = firstIndex(s[index:], substrs...)
 	}
 	return result
+}
+
+func MD5(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
+
 }
