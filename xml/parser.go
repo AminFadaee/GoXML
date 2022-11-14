@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"kirby.lensreader.com/utility"
+	"goxml.com/utility"
 )
 
 type rawElement struct {
